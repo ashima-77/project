@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+
+  <script>
+     function showPrev(fileRef,prevRef)
+         {
+                         const [file] = fileRef.files
+                            if (file) {
+                                prevRef.src = URL.createObjectURL(file)
+                            }
+        }
+          
+  </script>
+  <script>
+        $(document).ready(function(){
+            $("#btnFetchWithAjax2").click(function()
+            {let obj={
+                type:"get",
+                 url:"/search-one",
+                data:{
+                    txtEmail5:$("#txtEmail5").val()
+
+                }
+            }
+            $.ajax(obj).then(function(responseJsonAry)
+            {
+                alert(JSON.stringify(responseJsonAry));
+                             let acardpicurl=responseJsonAry[0].acardpicurl;
+                              let profilepicurl=responseJsonAry[0].profilepicurl;
+                              let personname=responseJsonAry[0].personname;
+                              let dob=responseJsonAry[0].dob;
+                              let gender=responseJsonAry[0].gender;
+                              let address=responseJsonAry[0].address;
+                              let contact=responseJsonAry[0].contact;
+                              let game=responseJsonAry[0].game;
+                              let otherinfo=responseJsonAry[0].otherinfo;
+
+                              // let picA = responseJsonAry[0].acardpicurl; 
+                              // let  profile = responseJsonAry[0].profilepicurl;
+                              
+                            // alert(picA+"\n"+profile+"\n"+personname+"\n"+dob+"\n"+gender+"\n"+address+"\n"+contact+"\n"+game+"\n"+otherinfo);
+                           
+                           
+                             $("#hide").val(acardpicurl); 
+                              $("#hidden").val(profilepicurl);
+                             $("#picB").prop("src",acardpicurl); 
+                             $("#prev").prop("src",profilepicurl);  
+                             $("#txtName").val(personname); 
+                             $("#txtDob").val(dob);  
+                              $("#txtGen").val(gender);
+                              $("#txtAdd2").val(address);
+                              $("#txtContact").val(contact); 
+                              $("#txtGame").val(game); 
+                              $("#txtInfo").val(otherinfo);
+
+            }).fail(function(err){alert(err.message)})
+        })
+        })
+
+        // --------------------------------------------------------------------------------
+          
+  </script>
+  <script>
+      function showUser()
+      {
+        let activeUser=localStorage.getItem("activeUser");
+        document.getElementById("txtEmail5").value=activeUser;
+      }
+    </script>
+   
+  </head>
+  <body onload="showUser();">
+    <div class="row " >
+            <div class="col-md-12  bg-primary text-white" style="padding:14px 0px 14px 0px;">
+                FitFlicks
+            </div>
+            
+        <div class="row ">
+            <div class="col-md-8 offset-md-2 bg-warning text-white mt-2" >
+                <center><h2>Profile of the Player</h2></center>
+            </div>
+        </div>
+      
+    <div class="container row mx-auto" style="width: 800px;">
+        <form class="row g-3" action="/profile-player" method="post" enctype="multipart/form-data">
+               <input type="hidden" id="hide" name="hide">
+                  <input type="hidden" id="hidden" name="hidden">
+  <div class="col-md-10">
+    <label for="inputEmail4" class="form-label">Email ID</label>
+    <input type="email" class="form-control" autofocus name="txtEmail5" id="txtEmail5" value="bcebti@gmail.com" >
+  </div>
+
+    <div class="col-md-2">
+      <br>
+    <input type="button" value="Get Data" class="btn btn-warning " id="btnFetchWithAjax2"> 
+  </div>
+  <div class="col-md-6">
+      Upload Front of Adhaar Card <input type="file" name="picA" class="form-control"  accept="image/*" id="Pic"  onchange="showPrev(Pic,picB);">
+       <img src="pics/customer.jpg" width="300" height="100" id="picB" alt="">
+      
+    </div>
+
+    <div class="col-md-6">
+     
+      Profile Pic<input type="file" name="profile" class="form-control"  accept="image/*" id="prrPic"  onchange="showPrev(prrPic,prev);">
+      <img src="pics/prize.jpg" width="300" height="100" id="prev" alt="">
+    </div>
+     <div class="col-md-4">
+    <label for="inputorganization" class="form-label">Name</label>
+    <input type="text" class="form-control" name="txtName" id="txtName" >
+  </div>
+     <div class="col-md-4">
+    <label for="inputorganization" class="form-label">DOB</label>
+    <input type="text" class="form-control" name="txtDob" id="txtDob" >
+  </div>
+   <div class="col-md-4">
+    <label for="inputorganization" class="form-label">Gender</label>
+    <input type="text" class="form-control" name="txtGen" id="txtGen" >
+  </div>
+
+  <div class="col-md-6">
+    <label for="inputorganization" class="form-label">Addresss</label>
+    <input type="text" class="form-control" name="txtAdd2" id="txtAdd2" >
+  </div>
+
+  <div class="col-md-6">
+    <label for="inputAddress" class="form-label">Contact Number</label>
+    <input type="text" class="form-control"  name="txtContact" id="txtContact" placeholder="contact number" >
+  </div>
+
+
+  <div class="col-md-6">
+    <label for="inputGames" class="form-label">Games You Play</label>
+    <input type="text" class="form-control"  name="txtGame" id="txtGame" >
+  </div>
+  <div class="col-md-6">
+  Other Info  <textarea name="txtInfo" id="txtInfo" class="form-control" rows="5"></textarea>
+  </div>
+     
+  <div class="col-md-6">
+   <center>
+     <button type="submit" class="btn btn-warning">Upload Data</button>
+      <input type="submit" class="btn btn-warning" value="Modify" formaction="/update-users-data">
+  </center> 
+  </div>
+</form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  </body>
+</html>

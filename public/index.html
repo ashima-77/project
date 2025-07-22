@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <script>
+        $(document).ready(function () {
+            $("#signup").click(function () {
+                let obj = {
+                    type: "get",
+                    url: "/server-signup-safe",
+                    data: {
+                        txtEmail: $("#txtEmail").val(),
+                        txtPwd: $("#txtPwd").val(),
+                        comboUser: $("#comboUser").val()
+
+                    }
+                }
+                $.ajax(obj).then(function (response) {
+                    alert(response);
+
+
+                }).fail(function (err) { alert(err.message) })
+            })
+            $("#btnLogin").click(function () {
+                let obj = {
+                    type: "get",
+                    url: "/do-login",
+                    data: {
+                        txtEmail2: $("#txtEmail2").val(),
+                        txtPwd2: $("#txtPwd2").val()
+                    }
+                }
+                $.ajax(obj).then(function (response) {
+                    //    alert(""+response+"")
+                    //          if(response=="Blocked")
+                    //         alert("Sorry!!Ur ID is Blocked");
+                    //     else if(response=="Invalid")
+                    //     alert("Invalid emailid or Password");
+                    // else
+                    if (response == "Player") {
+                        localStorage.setItem("activeUser", $("#txtEmail2").val());
+                        location.href = "dash-player.html";
+                    }
+                    else if (response == "Organizer") {
+                        localStorage.setItem("activeUser", $("#txtEmail2").val());
+
+                        location.href = "org-dash.html";
+                    }
+                    else if (response == "Admin") {
+                        localStorage.setItem("activeUser", $("#txtEmail2").val());
+                        location.href = "dash admin.html";
+                    }
+
+
+                }).fail(function (err) {
+                    alert(err);
+                })
+            })
+        })
+    </script>
+    <!-- Styling for validations -->
+    <style>
+        .ok {
+            color: green;
+            padding: 1px;
+            background-color: greenyellow;
+            border-radius: 2px;
+
+        }
+
+        .not-ok {
+            color: white;
+            padding: 1px;
+            background-color: red;
+            border-radius: 2px;
+        }
+
+        .ok-pic {
+            width: 20px;
+            height: 20px;
+            background-image: url(pics/ok.png);
+            background-size: contain;
+        }
+
+        .not-ok-pic {
+            width: 20px;
+            height: 20px;
+            background-image: url(pics/cross.png);
+            background-size: contain;
+        }
+
+        #eye {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            cursor: pointer;
+            color: black;
+        }
+
+        #eye2 {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+    <!-- Validations -->
+
+    <script>
+        $(document).ready(function () {
+            $("#txtEmail").keyup(function () {
+                let email = $(this).val();
+                // let regrex = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/;
+                let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+                if (email == "") {
+                    $("#errMsgE").html("Empty").addClass("not-ok").removeClass("ok");
+                    $("#errPicE").addClass("not-ok-pic").removeClass("ok-pic");
+                    $(this).focus();
+
+                }
+
+                else if (regex.test(email) == false) {
+
+                    $("#errMsgE").html("Invalid Emailid").addClass("not-ok").removeClass("ok");
+                    $("#errPicE").addClass("not-ok-pic").removeClass("ok-pic");
+
+                }
+
+                else {
+                    $("#errMsgE").html("Ok").addClass("ok").removeClass("not-ok");
+                    $("#errPicE").addClass("ok-pic").removeClass("not-ok-pic");
+                }
+
+            })
+            // ----------------------------------------------------
+            $("#txtPwd").blur(function () {
+                let regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+                let pwd = $(this).val();
+                if (regex.test(pwd) == true)
+                    alert("Theek hai");
+                else
+                    alert("Wrong Hai");
+            })
+
+            // ---------------------------------------------------------------
+            $("#eye").click(function () {
+                let txt = $("#txtPwd").prop("type");
+                if (txt == "password") {
+                    $("#txtPwd").prop("type", "text");
+                    $("#eye").removeClass("fa-eye").addClass("fa-eye-slash");
+                }
+                else {
+                    $("#txtPwd").prop("type", "password");
+                    $("#eye").removeClass("fa-eye-slash").addClass("fa-eye");
+                }
+            })
+
+            $("#eye2").click(function () {
+                let txt = $("#txtPwd2").prop("type");
+                if (txt == "password") {
+                    $("#txtPwd2").prop("type", "text");
+                    $("#eye2").removeClass("fa-eye").addClass("fa-eye-slash");
+                }
+                else {
+                    $("#txtPwd2").prop("type", "password");
+                    $("#eye2").removeClass("fa-eye-slash").addClass("fa-eye");
+                }
+            })
+
+        })
+
+    </script>
+
+
+
+    <!-- <style>
+        #logo {
+            width: 90px;
+            height: 90px;
+            /* background-color: #fff; */
+            float: left;
+            margin-top: 5px;
+            margin-left: 20px;
+            background-image: url("pics/my.jpg");
+            background-size: contain;
+            background-repeat: no-repeat;
+
+        }
+
+        #outer-div {
+            width: 1200px;
+            height: 500px;
+            background-color: white;
+            margin: auto;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            /* margin-left: 20px; */
+        }
+
+        #img-div {
+            width: 500px;
+            height: 400px;
+            margin: auto;
+
+            background-color: whitesmoke;
+            margin-top: 20px;
+            background-image: url("pics/my.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: inline-block;
+            margin-top: 0px;
+            margin-top: 5px;
+        }
+
+        #text-div {
+            width: 500px;
+            height: inherit;
+            background-color: salmon;
+            margin-top: 10px;
+            margin: auto;
+            margin-top: 10px;
+            display: inline-block;
+            margin-top: 5px;
+
+
+        }
+
+        #map-div {
+            width: 1000px;
+            height: 650px;
+            background-color: white;
+            margin: auto;
+            margin-bottom: -2px;
+            margin-top: 10px;
+        }
+
+        #details {
+            width: 1000px;
+            height: 500px;
+            background-color: azure;
+        }
+
+        #developer {
+            width: 1200px;
+            height: 500px;
+            background-color: white;
+            margin: auto;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        #me {
+            width: 500px;
+            height: 400px;
+            margin: auto;
+
+            background-color: pink;
+            margin-top: 20px;
+            background-image: url("pics/me.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: inline-block;
+            margin-top: 0px;
+            margin-top: 60px
+        }
+
+        /* #sir
+        {
+            width:500px;
+            height:500px;
+            background-color:salmon;
+            margin-top: 10px;
+            margin:auto;
+            margin-top: 10px;
+            display: inline-block;
+            margin-top: 5px;
+             background-image: url("pics/");
+              background-size: contain; 
+             background-repeat: no-repeat;
+        }
+         */
+    </style> -->
+    <style>
+        .card:hover
+        {
+            box-shadow: 5px -5px wheat ;
+            transition: 0.5s ease-in;
+             
+        }
+    </style>
+
+
+</head>
+
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="#">
+        <img src="pics/my.jpg" alt="Logo" width="40" height="40" class="d-inline-block align-text-center">
+                <i>FitFlicks</i>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul> -->
+      <div class="ms-auto">
+         <input type="button" class="btn btn-primary" value="Signup" data-bs-toggle="modal"
+                    data-bs-target="#divSignup" style="margin-left: 10px ; ">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#divLogin">Login</button>
+                <a href="#reachUs" class="btn btn-primary" style="margin-left: 10px ; float: right;">Reach Us</a>
+          
+
+      </div>
+    </div>
+  </div>
+</nav>
+    <!-- <nav class="navbar navbar-expand-lg bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="#">
+                <img src="pics/my.jpg" alt="Logo" width="40" height="40" class="d-inline-block align-text-center">
+                <i>FitFlicks</i>
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+
+                </ul>
+                <input type="button" class="btn btn-primary" value="Signup" data-bs-toggle="modal"
+                    data-bs-target="#divSignup" style="margin-left: 10px ; ">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#divLogin">Login</button>
+                <a href="#reachUs" class="btn btn-primary" style="margin-left: 10px ; float: right;">Reach Us</a>
+            </div>
+        </div>
+    </nav> -->
+
+
+    <!-- <nav class="navbar navbar-expand-lg bg-primary">
+        <div class="container-fluid ">
+            <a class="navbar-brand text-white" href="#">
+                <img src="pics/my.jpg" alt="Logo" width="40" height="40" class="d-inline-block align-text-center">
+                www.realservices.com
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+                    <li class="nav-item text-center">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#divLogin"
+                            style="float:right;">Login</button>
+
+                    </li>
+                    <li class="nav-item text-center">
+                        <input type="button" class="btn btn-primary" value="Signup" data-bs-toggle="modal"
+                            data-bs-target="#divSignup" style="margin-left: 10px ; float: right;">
+
+                    </li>
+                    <li class="nav-item text-center">
+                       <a href="#reachUs" class="btn btn-primary"  style="margin-left: 10px ; float: right;">Reach Us</a>
+                       
+
+                    </li>
+                    
+                       
+
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>  -->
+    <center>
+        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="pics/games.jpg" class="d-block w-100" alt="..." height="400px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="pics/my.jpg" class="d-block w-100" alt="..." height="400px;">
+                </div>
+                <div class="carousel-item">
+                    <img src="pics/football.avif" class="d-block w-100" alt="..." height="400px;">
+                </div>
+            </div>
+        </div>
+    </center>
+    <div class="row">
+        <div class="col-md-12  bg-primary text-white" style="padding:14px 0px 14px 0px; margin-top: 8px;">
+            <center>
+                <h5>Our Services</h5>
+            </center>
+        </div>
+    </div>
+    <center>
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col-md-3 ">
+                    <div class="card">
+                        <img src="pics/tournament.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Tournaments</h5>
+                            <p class="card-text" style="color: purple; font-style: italic;">Holds tournaments for various types of sports all over the world so that players can participate in them.
+                                </p>
+                            
+                        </div>
+                    </div>
+                </div>
+              <div class="col-md-3 ">
+                    <div class="card">
+                        <img src="pics/sports game.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Sports</h5>
+                            <p class="card-text" style="color:purple; font-style: italic;">Provides information to players regarding various events and players can benifit from them and win prize money also.
+                               </p>
+                            
+                        </div>
+                    </div>
+                </div>
+              <div class="col-md-3 ">
+                    <div class="card">
+                        <img src="pics/Organization.jpg" class="card-img-top" alt="..." height="">
+                        <div class="card-body">
+                            <h5 class="card-title">Organizers</h5>
+                            <p class="card-text" style="color:purple; font-style: italic;">Organizers can upload information here regarding events they are organizing and details about it.
+                                </p>
+                            
+                        </div>
+                    </div>
+                </div>
+              <div class="col-md-3 ">
+                    <div class="card">
+                        <img src="pics/admin.jpg" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Admin</h5>
+                            <p class="card-text" style="color:purple; font-style:italic ;">Managing content,website functionality and handling user management.Page Creation etc.Users console etc.
+                                </p>
+                            
+                        </div>
+                    </div>
+                </div>
+              
+                </div>
+        </div>
+              
+                    
+       
+       
+       
+    </center>
+
+        <!-- <div class="container mt-2">
+            <div class="row">
+                <div class="col-md-4 ">
+                    <div class="card mb-2" style="border:2px black solid; margin-top: 20px; ">
+                        <img src="pics/tournament.jpg" class="card-img-top" alt="..." style="padding:10px;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center" style="color:red; font-weight: bolder;">Tournaments</h5>
+                            <p class="card-text text-center" style="color:blue; font-style: italic;">Tournaments is crucial for efficiency,
+                                goal
+                                achievement, coordination, and adaptability in any setting, from businesses to personal
+                                life. It provides structure, streamlines processes, and increased productivity.
+                                .</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card" style="border:2px black solid; margin-top: 20px; ">
+                        <img src="pics/Organization.jpg" class="card-img-top" alt="..." style="padding:10px;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center" style="color:red; font-weight: bolder;">Organizer's</h5>
+                            <p class="card-text text-center" style="color:blue; font-style: italic;">Organization is crucial for efficiency,
+                                goal achievement, coordination, and adaptability in any setting, from businesses to
+                                personal
+                                life. It provides structure, streamlines processes, and increased productivity.
+                            </p>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="card" style="border:2px black solid; margin-top: 20px; ">
+                        <img src="pics/football.avif" class="card-img-top" alt="..." height="210" style="padding:10px;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center " style="color:red; font-weight: bolder;">Players</h5>
+                            <p class="card-text" style="color:blue; font-style: italic;">In team sports, players are crucial for success,
+                                not
+                                just through their individual .In team sports, players are crucial for success, not just
+                                through their individual skills but also their contributions to team dynamics and
+                                culture.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center> -->
+
+        <!-- <div class="container text-center">
+  <div class="row">
+    <div class="col">
+      1 of 2
+    </div>
+    <div class="col">
+      2 of 2
+    </div>
+  </div>
+    </div> -->
+        <div class="row">
+            <div class="col-md-12  bg-primary text-white" style="padding:14px 0px 14px 0px;">
+                <center>
+                    <h5> Our Mission</h5>
+                </center>
+            </div>
+        </div>
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="pics/games.jpg" width="400px;" height="300px;">
+                </div>
+                <div class="col-md-6">
+                    <span style="color:purple; font-style: italic;">
+                        A sports organization's mission is a concise statement that outlines its core purpose and what
+                        it aims to achieve through sports. It typically focuses on promoting participation, developing
+                        athletes, fostering values, or contributing to the community. A well-defined mission guides the
+                        organization's activities and provides a framework for its goals and strategies.
+                        Here's a breakdown of key aspects often found in the mission of a sports organization:
+                        1. Promoting Participation and Access:
+                        Encouraging physical activity:
+
+                    </span>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        </div>
+
+
+
+        </p>
+        </div>
+        <div class="row">
+            <div class="col-md-12  bg-primary text-white" style="padding:14px 0px 14px 0px; margin-bottom: 10px;">
+                <center>
+                    <h5> Know the Developers</h5>
+                </center>
+            </div>
+        </div>
+        <center>
+            <!-- <div class="container  row "  style="padding-left: 150px;">
+                <div class="row gap-3">
+                    <div class="card col-md-6"
+                        style=" margin-top: 10px; margin-bottom: 10px; border:2px  black solid;">
+                        <img src="pics/raj.jpg" class="card-img-top" alt="..." height="190px;" style="padding:15px;">
+                        <div class="card-body">
+                            <span class="card-text text-center" style="color:blue; text-align: center; font-style: italic;">
+                                Under the Guidance of: Rajesh K Bansal<br>
+                                (Author of Real Java)<br>
+                                Bangalore Computer Education<br>
+                                Ajit Road,Bathinda<br>
+                                Mobile Number: 9872246056
+
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card col-md-5" style="margin-top: 10px; margin-bottom: 10px; border:2px black solid;">
+                        <img src="pics/me.jpg" class="card-img-top" alt="..." height="190px;" style="padding:15px;">
+                        <div class="card-body">
+                            <span class="card-text" style="color:blue; text-align: center; font-style: italic; "> Made by: Ashima Arora<br>
+                                Education: Btech CSE(3rd year),Giani Zial Singh College of Engineering
+                                <br> Linkedin Profile: www.linkedin.com/in/ashima-arora-739160296</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center> -->
+
+            <!-- <div id="developer">
+            <div id="me">
+            </div>
+            <center>
+                <table>
+                    <tr>
+                        <td style="color:purple;">
+                            Developed By: Ashima Arora
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color:purple">
+                            Education: Btech CSE(3rd Year)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color:purple;">
+                            College: Giani Zial Singh College of Engineering and Technology,Bathinda
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color:blue;">
+                            Linkedin Profile: www.linkedin.com/in/ashima-arora-739160296
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color:purple">
+                            My Contact No:6280901512
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Under the Guidance of: Rajesh Kumar Bansal sir
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bangalore Computer Education,Ajit Road,Bathinda(Punjab)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mobile:9872246056
+                        </td>
+                    </tr>
+
+                </table>
+            </center>
+
+        </div>
+    </div> -->
+
+
+
+            <!-- <div class="col-md-6">
+                <div class="card" style="width: 18rem; border:2px black solid;">
+                    <img src="pics/Organization.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" style="color:red; font-weight: bolder;">Organizer's</h5>
+                        <p class="card-text text-center" style="color:blue;">Organization is crucial for efficiency, goal achievement, coordination, and adaptability in any setting, from businesses to personal life. It provides structure, streamlines processes, and increased productivity. 
+                            </p>
+                        
+                    </div>
+                </div> -->
+
+            <!-- </div> -->
+            <!-- <div class="row">
+    <div class="col-md-10 offset-md-1 mt-4" >
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card" style="border:1px black solid;">
+            <img src="pics/me.jpg" class="card-img-top" alt="..." height="250px;"/>
+            <div class="card-body">
+                <h5 class="card-title text-center" style="color:red; font-weight: bolder;">Developer</h5>
+              <pre>
+              Developed By:Ashima Arora
+              College:Giani Zial Singh College of Engineering and Technology,Bathinda
+              Linkedin:www.linkedin.com/in/ashima-arora-739160296
+              Contact No:6280901512
+
+
+
+              </pre> -->
+
+
+
+            <!-- As a heading -->
+
+            <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#divLogin">Login</button>
+        <input type="button" class="btn btn-primary" value="Signup" data-bs-toggle="modal" data-bs-target="#divSignup">  -->
+            <!-- <a href="org-dash.html" class="btn btn-primary">org-dash
+        </a>
+         <a href="dash-player.html" class="btn btn-primary ">Dash-Player
+        </a>
+        <a href="dash admin.html" class="btn btn-primary">Dash Admin</a>  -->
+            <!-- <div class="col-md-12  bg-primary text-white" style="padding:14px 0px 14px 0px;">
+        <center>
+            <h5>Reach Us</h5>
+        </center>
+    </div> -->
+
+            <div class="container">
+                <div class="row mt-4 mb-3">
+                    <div class="col-md-6 bg-light">
+                        <img src="pics/raj.jpg" class="card-img-top" alt="..." height="300" width="100">
+                        <span class="card-text text-center"
+                            style="color:purple; text-align: center; font-style: italic;">
+                            Under the Guidance of: Rajesh K Bansal
+                            (Author of Real Java)<br>
+                            Bangalore Computer Education<br>
+                            Ajit Road,Bathinda<br>
+                            Mobile Number: 9872246056
+
+                        </span>
+
+
+                    </div>
+                    <div class="col-md-6 bg-light">
+                        <img src="pics/me.jpg" class="card-img-top" alt="..." height="300" width="100">
+                        <span class="card-text" style="color:purple; text-align: center; font-style: italic; "> Made by:
+                            Ashima Arora<br>
+                            Education: Btech CSE(3rd year),Giani Zial Singh College of Engineering
+                            <br> Linkedin Profile: www.linkedin.com/in/ashima-arora-739160296<br> Contact No:
+                            6280901512</span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12  bg-primary text-white" style=" margin-bottom: 10px; padding:14px 0px 14px 0px;">
+                    <center>
+                        <h5 id="reachUs"> Reach Us</h5>
+                    </center>
+                </div>
+            </div>
+            <!-- <div id="map-div" style="margin-top: 8px;">
+    <div id="details">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d448225.5157659156!2d77.0526914!3d28.6368991!3m2!1i1024!2i768!4f13.1!2m1!1ssports%20organization%20in%20delhi%20location!5e0!3m2!1sen!2sin!4v1753023663562!5m2!1sen!2sin" width="100%" height="500" style="border:0;" allowfullscreen=""  loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+   
+       
+            
+           <center>
+             
+        <table>
+            
+            <tr>
+                <td style="color:purple; font-style: italic;">
+                    Address: Bibi Wala Chowk,Bathinda
+
+                </td>
+            </tr>
+            <tr>
+                <td style="color:blue; font-style: italic;">
+                    Website: www.sportstournamentsorg.com
+                   
+
+                </td>
+            </tr>
+             <tr>
+                <td style="color:purple;font-style: italic;">
+                      Contact No: 6280901512
+                    
+                   
+
+                </td>
+            </tr>
+            <tr>
+                <td style="color:blue; font-style: italic;">
+                     Instagram Profile:https://www.instagram.com/twinklearora62?igsh=ZzJ1MjFqcWk0bzQw
+                      
+                    
+                   
+
+                </td>
+            </tr>
+            <tr>
+                <td style="color:blue;font-style: italic;">
+                     Linkedin Profile: www.linkedin.com/in/ashima-arora-739160296
+
+
+
+                      
+                    
+                   
+
+                </td>
+            </tr>
+            
+        </table>
+        </center>
+        </div>
+        
+        
+    </p>
+  </div> -->
+            <div class="container">
+                <div class="row mt-4">
+                    <div class="col-md-6 bg-white">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d448225.5157659156!2d77.0526914!3d28.6368991!3m2!1i1024!2i768!4f13.1!2m1!1ssports%20organization%20in%20delhi%20location!5e0!3m2!1sen!2sin!4v1753023663562!5m2!1sen!2sin"
+                            width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade" style="background-size: cover;"></iframe>
+
+                    </div>
+                    <div class="col-md-6 bg-light">
+                        <center>
+                            <table border="0">
+
+                                <tr>
+                                    <td style="color:purple; font-style: italic;">
+                                        Address: Bibi Wala Chowk,Bathinda
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:blue; font-style: italic;">
+                                        Website: www.FitFlicks.in
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:purple;font-style: italic;">
+                                        Contact No: 6280901512
+
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:blue; font-style: italic;">
+                                        Instagram Profile:https://www.instagram.com/twinklearora62?igsh=ZzJ1MjFqcWk0bzQw
+
+
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color:blue;font-style: italic;">
+                                        Linkedin Profile: www.linkedin.com/in/ashima-arora-739160296
+
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </center>
+                    </div>
+
+
+                    </p>
+                </div>
+            </div>
+            <!-- </div>
+            </div> -->
+
+            <div class="row">
+                <div class="col-md-12  bg-primary text-white">
+                    <center>
+                        <pre style="font-style: italic;">
+                    &copy All rights reserved
+                </pre>
+                    </center>
+
+                </div>
+            </div>
+
+            <!-- Modal1 for signup -->
+            <div class="modal fade" tabindex="-1" id="divSignup">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="background-color:white; border:2px black solid;">
+                        <div class="modal-header bg-danger text-black">
+                            <h5 class="modal-title">Signup Modal</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-black">
+                            <div class=" mb-3">
+                                Email ID <input type="text" class="form-control" name="txtEmail" id="txtEmail"
+                                    value="bcebti@gmail.com">
+                                <div style="display:flex;">
+                                    <div style="margin-right:10px;" id="errPicE"></div>
+                                    <div id="errMsgE"></div>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                Password <input type="password" class="form-control" name="txtPwd" id="txtPwd">
+                                <i class="fa-solid fa-eye fa-bounce" id="eye"></i>
+                                <div style="display:flex;">
+                                    <div style="margin-right:10px;" id="errPicP"></div>
+                                    <div id="errMsgP"></div>
+                                </div>
+                            </div>
+                            <br>
+                            <p>
+                                User-Type
+                                <select name="usertype" id="comboUser" class="form-select">
+                                    <option value="none">Select</option>
+                                    <option value="Player">Player</option>
+                                    <option value="Organizer">Organizer</option>
+                                </select>
+                            </p>
+                            <!-- </form>  -->
+                        </div>
+
+                        <div class="modal-footer text">
+                            <input type="button" class="btn btn-danger" value="Signup" id="signup">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Modal-2 for login -->
+            <div class="modal fade" tabindex="-1" id="divLogin">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="background-color: white; border:2px black solid;">
+                        <div class="modal-header bg-danger text-black">
+                            <h5 class="modal-title">Login Modal</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-black">
+                            <div class="form-floating mb-3">
+
+                                <p>
+                                    Emailid<input type="email" class="form-control" id="txtEmail2" name="txtEmail2"
+                                        required>
+
+
+                                </p>
+                            </div>
+                            <div class="form-floating">
+                                <p>
+                                    Password<input type="password" class="form-control" id="txtPwd2" name="txtPwd2"></p>
+                                <i class="fa-solid fa-eye fa-bounce" id="eye2"></i>
+
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-danger" id="btnLogin" value="Login">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+</body>
+
+
+</html>

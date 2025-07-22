@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+     <script>
+        var mymodule=angular.module("kuchModule",[]);
+        mymodule.controller("kuchController",function($scope,$http)
+    { 
+        $scope.jsonArray=[];
+         $scope.doUpdate=function()
+       {
+          var url="/do-change-password?emailid="+$scope.emailid+ "&oldpwd="+$scope.oldpwd+"&newpwd="+$scope.newpwd;
+           
+            
+        $http.get(url).then(allGoodFx,someBadFx);
+        
+        function allGoodFx(response)
+        {
+            alert(JSON.stringify(response.data));
+             $scope.jsonArray=response.data; 
+        }
+        
+        function someBadFx(response)
+        {
+             alert(JSON.stringify(response.data));
+        }
+    }
+  });
+  </script>
+  <!-- <script>
+     
+             $(document).ready(function () {
+            $("#btnUpdate").click(function () {
+                let obj = {
+                    type: "get",
+                    url: "/do-change-password",
+                    data: {
+                        txtEmail6: $("#txtEmail6").val(),
+                        txtOld: $("#txtOld").val(),
+                        txtNew: $("#txtNew").val(),
+                    }
+                       
+                        
+
+                    }
+                })
+                $.ajax(obj).then(function (response) {
+                    alert(response);
+
+                }).fail(function (err) { alert(err.message) })
+            })
+        
+
+  </script> -->
+   <script>
+      function showUser()
+      {
+        let activeUser=localStorage.getItem("activeUser");
+        document.getElementById("welcome").innerHTML=activeUser;
+      }
+      function doLogout()
+      {
+        localStorage.removeItem("activeUser");
+        location.href="index.html";
+      }
+    </script>
+
+    
+
+  </head>
+  <body ng-app="kuchModule" ng-controller="kuchController" onload="showUser();">
+    <div class="row">
+            <div class="col-md-12  bg-primary text-white" style="padding:14px 0px 14px 0px;">
+              Welcome:<span id="welcome">*</span>
+            </div>
+    
+  <div class="row">
+    <div class="col-md-10 offset-md-1 mt-4" >
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card" style="border:1px black solid;">
+            <img src="pics/profile.png" class="card-img-top" alt="..." />
+            <div class="card-body">
+                <center><a href="/profile" class="btn btn-danger" id="eventsbtn">Profile</a></center>
+            </div>
+          </div>    
+        </div>
+        <div class="col-md-3">
+          <div class="card" style="border:1px black solid;">
+            <img src="pics/settings.jpg" class="card-img-top" alt="..." />
+            <div class="card-body">
+           <center> <input type="button" value="Settings" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#divPwd"></center>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card" style="border:1px black solid;">
+            <img src="pics/events.jpg" class="card-img-top" alt="..." height="250px;"/>
+            <div class="card-body">
+                <center><a href="/tournamentFinder.html" class="btn btn-danger" id="eventsbtn">Explore Tournaments</a></center>
+             
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card" style="border:1px black solid;">
+            <img src="pics/log.jpg" class="card-img-top" alt="..."  height="250px;" />
+            <div class="card-body">
+                <center><input type="button" value="Logout" class="btn btn-danger" onclick="doLogout();"></center>
+              
+            </div>
+          </div>
+        </div>
+      
+        </div>
+      </div>
+    </div>
+  </div>  
+  <!-- Modal -->
+   <div class="modal fade" tabindex="-1" id="divPwd">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Edit /Change Your Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-black" >
+                    <div class="form-floating mb-3">
+                        <p>
+                        Email Id<input type="email" class="form-control" id="txtEmail6" name="txtEmail6" ng-model="emailid" >
+                       
+                        </p>
+                    </div>
+                    <div class="form-floating">
+                        <p>
+                       Old Password<input type="password" class="form-control" id="txtOld" name="txtOld" ng-model="oldpwd">
+                  
+                        </p>
+                    </div>
+                    <div class="form-floating">
+                        <p>
+                       New Password<input type="password" class="form-control" id="txtNew" name="txtNew" ng-model="newpwd">
+                  
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-danger" id="" value="Update Password" ng-click="doUpdate();">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
